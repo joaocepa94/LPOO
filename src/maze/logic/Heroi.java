@@ -24,5 +24,5 @@ public class Heroi extends Elements{
 		estouArmado = true;
 		return estouArmado;
 	}
-	
+
 }

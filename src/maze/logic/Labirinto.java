@@ -16,7 +16,6 @@ public class Labirinto {
 		// TODO Auto-generated constructor stub
 		
 		h = new Heroi(1,1,'H');
-		//d = new Dragao(3,1,'D',0);
 		
 		lab = new char[][] {
 				{ 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'X' },
@@ -50,7 +49,7 @@ public class Labirinto {
 			}
 		}
 	}
-	public static void LabirintoAle(int dim) {
+	public static void LabirintoAle(int dim, int numD) {
 		
 		h = new Heroi();
 		d = new Dragao();
@@ -151,7 +150,11 @@ public class Labirinto {
 			}
 		}
 		InsereElemento(dim,'H');
-		InsereElemento(dim,'D');
+		while(numD!=0){
+			InsereElemento(dim,'D');
+			numD--;
+			
+		}
 		InsereElemento(dim,'E');
 		imprimir(dim);
 		return;
@@ -307,8 +310,7 @@ public class Labirinto {
 
 		switch (next) {
 		case 1:
-			lab[h.GetPosicaoY()][h.GetPosicaoX()] = 'S';
-			break;
+			return false;
 		case 2:
 			return true; // joga novamente
 		case 3:
@@ -340,7 +342,9 @@ public class Labirinto {
 				lab[nextlin][nextcol] = 'H';
 				h.SetPosicaoX(nextlin);
 				h.SetPosicaoY(nextcol);
-				break;}
+				break;
+				}
+			
 		case 8:
 			return true; // joga novamente
 		}
@@ -363,22 +367,30 @@ public class Labirinto {
 		return ch;
 
 	}
-	public static boolean clique(char ch, int dim) {
+	public static boolean clique(char ch, int dim, char m, int estra) {
 
 		boolean mov = true;
 
 		switch (ch) {
 		case 'e':
 			mov = moveEsquerda(dim);
+			if(ExisteDragao(dim) && estra == 2)
+				NovaPosicaoDragao();
 			break;
 		case 'd':
 			mov = moveDireita(dim);
+			if(ExisteDragao(dim) && estra == 2)
+				NovaPosicaoDragao();
 			break;
 		case 'c':
 			mov = moveCima(dim);
+			if(ExisteDragao(dim) && estra == 2)
+				NovaPosicaoDragao();
 			break;
 		case 'b':
 			mov = moveBaixo(dim);
+			if(ExisteDragao(dim) && estra == 2)
+				NovaPosicaoDragao();
 			break;
 		default:
 			System.out.println("direccao invalida");
@@ -415,4 +427,114 @@ public class Labirinto {
 		}
 	}
 	
+	public static void NovaPosicaoDragao() {
+
+		while (true) {
+
+			lab[d.GetPosicaoY()][d.GetPosicaoX()] = ' ';
+			Random ale = new Random();
+			int vari = ale.nextInt(5) + 1;
+
+			if (vari == 1) {
+				if (lab[d.GetPosicaoY()][d.GetPosicaoX() + 1] != 'X'
+						&& lab[d.GetPosicaoY()][d.GetPosicaoX() + 1] != 'S'
+						&& lab[d.GetPosicaoY()][d.GetPosicaoX() + 1] != lab[h.GetPosicaoY()][h.GetPosicaoX()]) {
+					if (lab[d.GetPosicaoY()][d.GetPosicaoX() + 1] == 'E') {
+						lab[d.GetPosicaoY()][d.GetPosicaoX() + 1] = 'F';
+						d.SetPosicaoX(d.GetPosicaoX()+1);
+					} else {
+						if (lab[d.GetPosicaoY()][d.GetPosicaoX()] == 'F') {
+							lab[d.GetPosicaoY()][d.GetPosicaoX()] = 'E';
+							lab[d.GetPosicaoY()][d.GetPosicaoX() + 1] = 'D';
+							d.SetPosicaoX(d.GetPosicaoX()+1);
+						} else {
+							lab[d.GetPosicaoY()][d.GetPosicaoX() + 1] = 'D';
+							d.SetPosicaoX(d.GetPosicaoX()+1);
+						}
+					}
+					break;
+				}
+			} else {
+
+				if (vari == 2) {
+					if (lab[d.GetPosicaoY()+1][d.GetPosicaoX()] != 'X'
+							&& lab[d.GetPosicaoY()+1][d.GetPosicaoX()] != 'S'
+							&& lab[d.GetPosicaoY()+1][d.GetPosicaoX()] != lab[h.GetPosicaoY()][h.GetPosicaoX()]) {
+						if (lab[d.GetPosicaoY()+1][d.GetPosicaoX()] == 'E') {
+							lab[d.GetPosicaoY()+1][d.GetPosicaoX()] = 'F';
+							d.SetPosicaoY(d.GetPosicaoY()+1);
+						} else {
+							if (lab[d.GetPosicaoY()][d.GetPosicaoX()] == 'F') {
+								lab[d.GetPosicaoY()][d.GetPosicaoX()] = 'E';
+								lab[d.GetPosicaoY()+1][d.GetPosicaoX()] = 'D';
+								d.SetPosicaoY(d.GetPosicaoY()+1);
+							} else {
+								lab[d.GetPosicaoY()+1][d.GetPosicaoX()] = 'D';
+								d.SetPosicaoY(d.GetPosicaoY()+1);
+							}
+						}
+						break;
+					}
+
+				} else {
+					if (vari == 3) {
+						if (lab[d.GetPosicaoY()][d.GetPosicaoX() - 1] != 'X'
+								&& lab[d.GetPosicaoY()][d.GetPosicaoX() - 1] != 'S'
+								&& lab[d.GetPosicaoY()][d.GetPosicaoX() - 1] != lab[h.GetPosicaoY()][h.GetPosicaoX()]) {
+							if (lab[d.GetPosicaoY()][d.GetPosicaoX() - 1] == 'E') {
+								lab[d.GetPosicaoY()][d.GetPosicaoX() - 1] = 'F';
+								d.SetPosicaoX(d.GetPosicaoX()-1);
+							} else {
+								if (lab[d.GetPosicaoY()][d.GetPosicaoX()] == 'F') {
+									lab[d.GetPosicaoY()][d.GetPosicaoX()] = 'E';
+									lab[d.GetPosicaoY()][d.GetPosicaoX() - 1] = 'D';
+									d.SetPosicaoX(d.GetPosicaoX()-1);
+								} else {
+									lab[d.GetPosicaoY()][d.GetPosicaoX() - 1] = 'D';
+									d.SetPosicaoX(d.GetPosicaoX()-1);
+								}
+							}
+							break;
+						}
+
+					} else {
+						if (vari == 4) {
+							if (lab[d.GetPosicaoY()-1][d.GetPosicaoX()] != 'X'
+									&& lab[d.GetPosicaoY()-1][d.GetPosicaoX()] != 'S'
+									&& lab[d.GetPosicaoY()-1][d.GetPosicaoX()] != lab[h.GetPosicaoY()][h.GetPosicaoX()]) {
+								if (lab[d.GetPosicaoY()-1][d.GetPosicaoX()] == 'E') {
+									lab[d.GetPosicaoY()-1][d.GetPosicaoX()] = 'F';
+									d.SetPosicaoY(d.GetPosicaoY()-1);
+								} else {
+									if (lab[d.GetPosicaoY()][d.GetPosicaoX()] == 'F') {
+										lab[d.GetPosicaoY()][d.GetPosicaoX()] = 'E';
+										lab[d.GetPosicaoY()-1][d.GetPosicaoX()] = 'D';
+										d.SetPosicaoY(d.GetPosicaoY()-1);
+									} else {
+										lab[d.GetPosicaoY()-1][d.GetPosicaoX()] = 'D';
+										d.SetPosicaoY(d.GetPosicaoY()-1);
+									}
+								}
+								break;
+							}
+						} else {
+							lab[d.GetPosicaoY()][d.GetPosicaoX()] = 'D';
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+	
+	public static boolean ExisteDragao(int dim){
+		for (int i=0; i < dim; i++) {
+			for (int j=0; j < dim; j++) {
+				if(lab[i][j]=='D')
+					return true;
+			}
+		}
+		
+		return false;
+	}
 }

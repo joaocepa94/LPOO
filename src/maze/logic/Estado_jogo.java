@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 public class Estado_jogo extends Labirinto{
 	public static char modo_jogo;
+	static int estrategia_dragoes;
+	static int numero_dragoes;
 
 
 	public static void main(String[] args) {
@@ -29,12 +31,10 @@ public class Estado_jogo extends Labirinto{
 
 
 		Scanner sc3 = new Scanner(System.in);
-		int numero_dragoes;
 		System.out.println("Quantos dragões pretende ?");
 		numero_dragoes = sc3.nextInt();
 
 		Scanner sc4 = new Scanner(System.in);
-		int estrategia_dragoes;
 		System.out.println("Que estratégia pretende ?");
 		System.out.println("1 - Dragão(ões) parado(s) ");
 		System.out.println("2 - Dragão(ões) com movimentação aleatória ");
@@ -44,17 +44,16 @@ public class Estado_jogo extends Labirinto{
 		System.out.println("Insira a dimensao do labirinto (impar): ");
 		Scanner sc2 = new Scanner(System.in);
 		int dim = sc2.nextInt();
-		LabirintoAle(dim);
+		LabirintoAle(dim, numero_dragoes);
 		ma(dim);
 	}
 
 	static void ma (int dim){
 		while(!ChegouAoFim()){
 			char direcao = direcao();
-			if (!clique(direcao,dim))
+			if (!clique(direcao,dim,modo_jogo, estrategia_dragoes))
 				break;
 			else {
-				//d.NovaPosicaoDragao();
 				imprimir(dim);
 			}
 		}
